@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>WebSockets</title>
+</head>
+<body>
+<table id="app">
+<tr v-for="(x, index) in records" v-cloak>
+  <td @click="addSite(x.code,x.deadline)">{{x.code}}<!-- {{ index }} --></a></td>
+  <td>{{x.deadline}} </a></td>
+  <td>{{x.market}}</td>
+  <td>{{x.trade_max_volume}}</td>
+  <td>{{x.trade_min_volume}}</td>
+</tr>
+</table>
+    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/vue.js"></script>
+
+
+    <script type="text/javascript">
+        $(".tdd").click(function(){
+     alert(333)
+});   
+    </script>
+
+
+    <script>
+        
+        new Vue({
+    el: '#app',
+    data: {
+        records: [
+    
+  ]
+    },
+    mounted: function(){
+var that=this;
+/*axios.get('show_list.php').then(function(res){
+//将ajax + php 交互 查询出来的JSON数据赋值给data中的sites
+if(res.data.length==0){
+that.info='抱歉，数据库中没有任何数据。';
+}else{
+that.sites=res.data;
+}
+
+}).catch(function(err) {
+  console.log(err);
+});*/
+setInterval(function(){
+    },1000)
+
+
+var ws = new WebSocket("ws://manager.nanhua.net:8123/wsnh");
+            ws.onopen = function(evt) {
+  console.log("Connection open ..."); 
+  ws.send('{"f":257,"r":"eT/uZ6FjTjSRHvIO7EexqA==","b":{"market":["SSE","SZSE","CZCE","DCE","SHFE","CFFEX"]}}');
+};
+ws.onmessage = function(evt) {
+  //console.log( "Received Message: " + evt.data);
+  //ws.close();
+  var shen = JSON.parse(evt.data);
+
+
+  console.log(shen.b.code_list);
+
+
+  that.records=shen.b.code_list;
+
+
+
+
+};
+ws.onclose = function(evt) {
+  console.log("Connection closed.");
+};
+},
+
+
+methods:{
+
+
+addSite:function(e,b){
+                    location.href="11.html?id="+e+"&num="+b;
+}
+
+
+}
+
+
+
+
+});
+</script>
+
+
+
+</body>
+</html>

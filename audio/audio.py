@@ -32,29 +32,34 @@ def download(url,user_agent="wswp",num_retries=2,charset='utf-8',proxy=None):
 			if hasattr(e,'code') and 500 <= e.code < 600:
 				return download(url,num_retries-1)
 	return html
-def parser_html():
+def parser_html(start,ends):
 	arr_node = []
 	page = ""
 	arr_obj = {}
-	count = 1
+	count = int(start)
 	str_num = ''
-	while count <= 10:
+	reads = read_txt()
+	print(reads)
+	# print(str(start))
+	while count <= int(ends):
 		page = "https://www.ximalaya.com/search/zhubo/%E8%82%A1%E7%A5%A8/p" +str(count)
 		htmls = download(page)
 		bsObj = BeautifulSoup(htmls,"html5lib")
 		nodes = bsObj.findAll("a",{'class':"anchor-link Qgwp"})
 		count = count+1
+		
 		for node in nodes:
 
 			str_num = str(node['href'].split('/')[-2])
-			print(str_num)
+			# print(str_num)
 			arr_node.append(str_num)
 			# print(read_txt()[str_num])
 			if (str_num in read_txt() )and read_txt()[str_num] == 1:
 				arr_obj[str_num]  =  1
 			else:
 				arr_obj[str_num] = 0
-	write_txt(arr_obj)
+		reads.update(arr_obj)
+	write_txt(reads)
 	return arr_node
 
 def every_page(p_htmls):
@@ -182,14 +187,15 @@ result.place(x= 70,y = 290)
 
 login = tk.Button(text="确认",width=8,height=1)
 def logins(event):
-	p_html = parser_html()
+	p_html = parser_html(infoObj['p1'] ,infoObj['p2'])
 	every_page(p_html)
 	
 login.bind("<Button-1>",logins)
 login.place(x= 80,y = 380)
 cancel = tk.Button(text="退出",width=8,height=1, command=mygui.quit)
 # def cancels(event):
-# 	infoObj["texts"] = texts.get('0.0','end')
+	# driver.quit()
+	# driver.close()
 # 	# print(infoObj["web"])
 # texts.bind("<FocusOut>",cancels)
 cancel.place(x= 300,y = 380)

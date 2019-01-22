@@ -1,4 +1,4 @@
-﻿#!/usr/bin/python3
+#!/usr/bin/python3
 # -*- coding: UTF-8 -*-
 
 import sys
@@ -45,16 +45,18 @@ def parser_html(html):
 	# else:
 	# 	nodes = bsObj.find_all("div",{'class':"para"})
 		return nodes
-		
-
-	
+			
 
 def write_txt(wObj):
 	with open('data/arr_num.txt','w') as file_w:
 		file_w.write(str(wObj))
-	
+def read_txt():
+	with open('data/arr_num.txt','r') as file_r:
+		lists=file_r.read()
+	return eval(lists)	
 
 if __name__ == '__main__':
+	read_txt()
 	address = urllib.parse.quote("奉贤") 
 	html = download("http://baike.baidu.com/item/"+ address) 
 	parser = str(parser_html(html))
